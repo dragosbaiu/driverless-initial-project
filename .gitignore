@@ -1,0 +1,23 @@
+# Build artifacts
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+# Binaries
+/main
+/*.out
+*.exe
+*.app
+*.dSYM/
+
+# IDE / editor
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Raylib / misc
+*.log

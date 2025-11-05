@@ -12,6 +12,8 @@ set(SOURCES
     src/main.cpp
     src/vehicle.cpp
     src/graphics.cpp
+    src/io.cpp
+    src/sim.cpp
 )
 
 add_executable(driverless-initial-project ${SOURCES})

@@ -5,6 +5,6 @@
 
 class Vehicle;
 
-void runApp(const Vehicle& vehicle, double roundedMax, std::string windowTitle);
+void runApp(Vehicle& vehicle, double roundedMax, std::string windowTitle);
 
 #endif

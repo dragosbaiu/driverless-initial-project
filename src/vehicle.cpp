@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "vehicle.hpp"
+#include "environment.hpp"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ void Vehicle::updatePosition(){
     y.push_back(y.back() + velocity.back() * sin(theta.back()) * dt);
 }
 
-void Vehicle::applyLateralDrift(double lateralDrift){
-    x.back() = x.back() - lateralDrift * sin(theta.back()) * dt;
-    y.back() = y.back() + lateralDrift * cos(theta.back()) * dt;
+void Vehicle::applyLateralDrift(Environment& environment){
+    x.back() = x.back() - environment.lateralDrift * sin(theta.back()) * dt;
+    y.back() = y.back() + environment.lateralDrift * cos(theta.back()) * dt;
 }

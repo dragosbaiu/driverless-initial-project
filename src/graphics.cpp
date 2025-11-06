@@ -17,7 +17,7 @@ void ToggleFullscreenWindow(){
     }
 }
 
-void runApp(const Vehicle& vehicle, double roundedMax, string windowTitle) {
+void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 600, windowTitle.c_str());
     SetTargetFPS(60);

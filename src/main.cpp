@@ -4,6 +4,8 @@
 #include "graphics.hpp"
 #include "control.hpp"
 #include "noise.hpp"
+#include "controller.hpp"
+#include "environment.hpp"
 #include <iostream>
 
 using namespace std;
@@ -11,8 +13,10 @@ using namespace std;
 int main() {
     
     Vehicle vehicle;
+    Controller controller;
+    Environment environment;
 
-    if (!readInput("data/input.txt", vehicle)) {
+    if (!readInput("data/input.txt", vehicle, controller, environment)) {
         return 1;
     }
 
@@ -21,16 +25,16 @@ int main() {
     Vehicle controlledVehicle = vehicle;
     Vehicle controlledVehicleWithDrift = vehicle;
 
-    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, 200);
+    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, environment);
     runApp(standardVehicle, roundedStandardMax, "Trajectory of Standard Bicycle Model");
 
-    double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, 200);
+    double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, environment);
     runApp(standardVehicleWithDrift, roundedDriftMax, "Trajectory of Bicycle with Lateral Drift");
 
-    double roundedControlledMax = simulateStraightPathAndGetRoundedMax(controlledVehicle, 200);
+    double roundedControlledMax = simulateStraightPathAndGetRoundedMax(controlledVehicle, environment, controller);
     runApp(controlledVehicle, roundedControlledMax, "Trajectory of Controlled Bicycle");
 
-    double roundedControlledDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(controlledVehicleWithDrift, 200);
+    double roundedControlledDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(controlledVehicleWithDrift, environment, controller);
     runApp(controlledVehicleWithDrift, roundedControlledDriftMax, "Trajectory of Controlled Bicycle with Lateral Drift");
 
     return 0;

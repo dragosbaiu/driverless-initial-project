@@ -3,6 +3,8 @@
 
 #include <vector>
 
+struct Environment;
+
 class Vehicle {
     public:
         std::vector <double> x, y, theta, velocity;
@@ -10,7 +12,7 @@ class Vehicle {
         Vehicle(double x, double y, double theta, double velocity, double acceleration, double delta, double dt, double L);
         Vehicle();
         void updatePosition();
-        void applyLateralDrift(double lateralDrift);
+        void applyLateralDrift(Environment& environment);
 };
 
 #endif

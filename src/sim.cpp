@@ -1,15 +1,16 @@
 #include "sim.hpp"
 #include "vehicle.hpp"
 #include "control.hpp"
+#include "environment.hpp"
+#include "controller.hpp"
 #include <cmath>
 
 using namespace std;
 
-double simulateAndGetRoundedMax(Vehicle& vehicle, int steps){
-
+double simulateAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
     double max = 0.0;
 
-    for (int i = 1; i < steps; i++){
+    for (int i = 1; i < environment.steps; i++){
         vehicle.updatePosition();
         if (abs(vehicle.x[i]) > max){
             max = abs(vehicle.x[i]);
@@ -22,14 +23,13 @@ double simulateAndGetRoundedMax(Vehicle& vehicle, int steps){
     return ceil(max);
 }
 
-double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, int steps){
+double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
 
     double max = 0.0;
-    double lateralDrift = 0.10;
 
-    for (int i = 1; i < steps; i++){
+    for (int i = 1; i < environment.steps; i++){
         vehicle.updatePosition();
-        vehicle.applyLateralDrift(lateralDrift);
+        vehicle.applyLateralDrift(environment);
         if (abs(vehicle.x[i]) > max){
             max = abs(vehicle.x[i]);
         }
@@ -42,16 +42,14 @@ double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, int steps){
 }
 
 
-double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, int steps){
+double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller){
 
     double max = 0.0;
 
-    double Kp = 0.5;
     double targetHeadingAngle = vehicle.theta[0];
-    double maxSteeringAngle = 0.5;
 
-    for (int i = 0; i < steps; i++){
-        vehicle.delta = proportionalControl(targetHeadingAngle, vehicle.theta.back(), Kp, maxSteeringAngle);
+    for (int i = 0; i < environment.steps; i++){
+        vehicle.delta = proportionalControl(controller, targetHeadingAngle, vehicle.theta.back());
         vehicle.updatePosition();
         if (abs(vehicle.x[i]) > max){
             max = abs(vehicle.x[i]);
@@ -64,19 +62,16 @@ double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, int steps){
     return ceil(max);
 }
 
-double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, int steps){
+double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller){
 
     double max = 0.0;
-    double Kp = 0.5;
-    double Ky = 0.1;
-    double lateralDrift = 0.10;
-    double targetHeadingAngle = vehicle.theta[0];
-    double maxSteeringAngle = 0.5;
 
-    for (int i = 0; i < steps; i++){
-        vehicle.delta = proportionalControlWithLateralDrift(vehicle, targetHeadingAngle, vehicle.theta.back(), Kp, maxSteeringAngle, lateralDrift, Ky);
+    double targetHeadingAngle = vehicle.theta[0];
+
+    for (int i = 0; i < environment.steps; i++){
+        vehicle.delta = proportionalControlWithLateralDrift(vehicle, environment, controller, targetHeadingAngle, vehicle.theta.back());
         vehicle.updatePosition();
-        vehicle.applyLateralDrift(lateralDrift);
+        vehicle.applyLateralDrift(environment);
         if (abs(vehicle.x[i]) > max){
             max = abs(vehicle.x[i]);
         }

@@ -10,6 +10,7 @@ class Vehicle {
         Vehicle(double x, double y, double theta, double velocity, double acceleration, double delta, double dt, double L);
         Vehicle();
         void updatePosition();
+        void applyLateralDrift(double lateralDrift);
 };
 
 #endif

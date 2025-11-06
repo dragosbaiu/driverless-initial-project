@@ -28,3 +28,8 @@ void Vehicle::updatePosition(){
     x.push_back(x.back() + velocity.back() * cos(theta.back()) * dt);
     y.push_back(y.back() + velocity.back() * sin(theta.back()) * dt);
 }
+
+void Vehicle::applyLateralDrift(double lateralDrift){
+    x.back() = x.back() - lateralDrift * sin(theta.back()) * dt;
+    y.back() = y.back() + lateralDrift * cos(theta.back()) * dt;
+}

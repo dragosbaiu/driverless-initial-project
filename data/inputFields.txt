@@ -1,2 +1,8 @@
-// x0 y0 theta0 velocity0 acceleration
-// delta dt L
+x - Initial x Coordinate
+y - Initial y Coordinate
+theta - Initial Heading Angle
+v - Initial Velocity
+a - Acceleration
+delta - Initial Steering Angle 
+dt - Time Step
+L - Wheelbase

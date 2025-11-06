@@ -18,12 +18,20 @@ int main() {
 
     Vehicle standardVehicle = vehicle;
     Vehicle noisyVehicle = vehicle;
+    Vehicle standardVehicleWithDrift = vehicle;
+    Vehicle noisyVehicleWithDrift = vehicle;
 
-    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, 100);
+    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, 200);
     runApp(standardVehicle, roundedStandardMax);
 
-    double roundedNoisyMax = simulateStraightPathAndGetRoundedMax(noisyVehicle, 100);
+    double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, 200);
+    runApp(standardVehicleWithDrift, roundedDriftMax);
+
+    double roundedNoisyMax = simulateStraightPathAndGetRoundedMax(noisyVehicle, 200);
     runApp(noisyVehicle, roundedNoisyMax);
+
+    double roundedNoisyDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(noisyVehicleWithDrift, 200);
+    runApp(noisyVehicleWithDrift, roundedNoisyDriftMax);
 
     return 0;
 }

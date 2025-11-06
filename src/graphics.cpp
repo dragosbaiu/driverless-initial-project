@@ -17,9 +17,9 @@ void ToggleFullscreenWindow(){
     }
 }
 
-void runApp(const Vehicle& vehicle, double roundedMax) {
+void runApp(const Vehicle& vehicle, double roundedMax, string windowTitle) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(800, 600, "Vehicle Trajectory");
+    InitWindow(800, 600, windowTitle.c_str());
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {

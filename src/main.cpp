@@ -17,21 +17,21 @@ int main() {
     }
 
     Vehicle standardVehicle = vehicle;
-    Vehicle noisyVehicle = vehicle;
     Vehicle standardVehicleWithDrift = vehicle;
-    Vehicle noisyVehicleWithDrift = vehicle;
+    Vehicle controlledVehicle = vehicle;
+    Vehicle controlledVehicleWithDrift = vehicle;
 
     double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, 200);
-    runApp(standardVehicle, roundedStandardMax);
+    runApp(standardVehicle, roundedStandardMax, "Trajectory of Standard Bicycle Model");
 
     double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, 200);
-    runApp(standardVehicleWithDrift, roundedDriftMax);
+    runApp(standardVehicleWithDrift, roundedDriftMax, "Trajectory of Bicycle with Lateral Drift");
 
-    double roundedNoisyMax = simulateStraightPathAndGetRoundedMax(noisyVehicle, 200);
-    runApp(noisyVehicle, roundedNoisyMax);
+    double roundedControlledMax = simulateStraightPathAndGetRoundedMax(controlledVehicle, 200);
+    runApp(controlledVehicle, roundedControlledMax, "Trajectory of Controlled Bicycle");
 
-    double roundedNoisyDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(noisyVehicleWithDrift, 200);
-    runApp(noisyVehicleWithDrift, roundedNoisyDriftMax);
+    double roundedControlledDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(controlledVehicleWithDrift, 200);
+    runApp(controlledVehicleWithDrift, roundedControlledDriftMax, "Trajectory of Controlled Bicycle with Lateral Drift");
 
     return 0;
 }

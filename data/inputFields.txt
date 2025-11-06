@@ -6,3 +6,7 @@ a - Acceleration
 delta - Initial Steering Angle 
 dt - Time Step
 L - Wheelbase
+Kp - Proportional Gain for Heading Error
+maxSteeringAngle - maximumSteeringAngle
+lateralDrift - lateralDrift
+Ky - Lateral Correction Gain

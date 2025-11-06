@@ -3,14 +3,14 @@
 #include <cstdlib>
 
 // Generate Gaussian noise using Box-Muller transform (method that is efficient for generating normally distributed random numbers)
-double generateGaussianNoise(double mean, double standardDeviation){
+double generateGaussianNoise(Controller controller){
     
     static bool hasSpare = false;
     static double spare;
 
     if(hasSpare){
         hasSpare = false;
-        return mean + standardDeviation * spare;
+        return controller.mean + controller.standardDeviation * spare;
     }
 
     hasSpare = true;
@@ -23,5 +23,5 @@ double generateGaussianNoise(double mean, double standardDeviation){
 
     s = sqrt( -2.0 * log(s) / s );
     spare = v * s;
-    return mean + standardDeviation * (u * s);
+    return controller.mean + controller.standardDeviation * (u * s);
 }

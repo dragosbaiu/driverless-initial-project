@@ -19,7 +19,7 @@ bool readInput(const string& path, Vehicle& vehicle, Controller& controller, Env
     file >> vehicle.acceleration >> vehicle.delta >> vehicle.dt >> vehicle.L;
 
     file >> controller.Kp >> controller.maxSteeringAngle >> environment.lateralDrift;
-    file >> controller.Ky >> environment.steps ;
+    file >> controller.Ky >> environment.steps >> controller.mean >> controller.standardDeviation;
 
     if (!file){
         cerr << "Input format error in " << path << '\n';

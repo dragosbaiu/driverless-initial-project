@@ -6,6 +6,8 @@ struct Controller{
     double Kp;
     double Ky;
     double maxSteeringAngle;
+    double mean;
+    double standardDeviation;
 };
 
 #endif

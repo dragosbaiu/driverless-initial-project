@@ -3,6 +3,7 @@
 #include "control.hpp"
 #include "environment.hpp"
 #include "controller.hpp"
+#include "noise.hpp"
 #include <cmath>
 
 using namespace std;
@@ -24,7 +25,7 @@ double simulateAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
     return ceil(max);
 }
 
-// Simulate vehicle movement based on kinematic bicycle model, takes into account lateral drift, and noise
+// Simulate vehicle movement based on kinematic bicycle model, takes into account lateral drift
 // Returns the rounded maximum distance from origin
 double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
 
@@ -48,7 +49,6 @@ double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environm
 double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller){
 
     double max = 0.0;
-
     double targetHeadingAngle = vehicle.theta[0];
 
     for (int i = 0; i < environment.steps; i++){
@@ -75,8 +75,11 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
     double targetHeadingAngle = vehicle.theta[0];
 
     for (int i = 0; i < environment.steps; i++){
+        // Add Gaussian noise to the current heading angle
+        // The noise simulates the error in a heading sensor
+        double noisyHeading = vehicle.theta.back() + generateGaussianNoise(controller);
         // Compute steering angle using proportional control, taking lateral drift and noise into consideration
-        vehicle.delta = proportionalControlWithLateralDrift(vehicle, environment, controller, targetHeadingAngle, vehicle.theta.back());
+        vehicle.delta = proportionalControlWithLateralDrift(vehicle, environment, controller, targetHeadingAngle, noisyHeading);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
         if (abs(vehicle.x[i]) > max){

@@ -30,9 +30,9 @@ int main() {
     double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, environment);
     runApp(standardVehicle, roundedStandardMax, "Trajectory of Standard Bicycle Model");
 
-    // Simulate and visualize bicycle model with noise and lateral drift
+    // Simulate and visualize bicycle model with lateral drift
     double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, environment);
-    runApp(standardVehicleWithDrift, roundedDriftMax, "Trajectory of Bicycle with Noise and Lateral Drift");
+    runApp(standardVehicleWithDrift, roundedDriftMax, "Trajectory of Bicycle with Lateral Drift");
 
     // Simulate and visualize controlled bicycle model
     double roundedControlledMax = simulateStraightPathAndGetRoundedMax(controlledVehicle, environment, controller);

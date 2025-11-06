@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Read vehicle, controller, and environment parameters from input file
 bool readInput(const string& path, Vehicle& vehicle, Controller& controller, Environment& environment) {
     fstream file (path);
     if (!file){

@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// Toggle fullscreen mode for the application window
 void ToggleFullscreenWindow(){
     static bool isFullscreen = false;
     isFullscreen = !isFullscreen;
@@ -17,6 +18,7 @@ void ToggleFullscreenWindow(){
     }
 }
 
+// Run the graphical application to visualize the vehicle trajectory
 void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 600, windowTitle.c_str());
@@ -34,13 +36,16 @@ void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
         int centerX = screenWidth/2;
         int centerY = screenHeight/2;
 
+        // Axis lines
         DrawLine(marginX - 10, centerY, screenWidth - marginX + 10, centerY, RAYWHITE);
         DrawLine(centerX, marginY -10, centerX, screenHeight - marginY + 10, RAYWHITE);
         
+        // Axis labels
         DrawText("X", screenWidth-marginX+40, centerY-8, 16, RAYWHITE);
         DrawText("Y", centerX-5, marginY-40, 16, RAYWHITE);
 
         int i=1;
+        // Draw X axis ticks and labels
         while (i*marginY <= centerX-marginX){
             DrawLine(centerX + (i*marginY), centerY - 5, centerX + (i*marginY), centerY + 5, RAYWHITE);
             DrawLine(centerX - (i*marginY), centerY - 5, centerX - (i*marginY), centerY + 5, RAYWHITE);
@@ -50,6 +55,7 @@ void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
 
             i++;
         }
+        // Draw Y axis ticks and labels
         for (int i = 1; i < 5; i++){
             DrawLine(centerX - 5, centerY + (i*marginY), centerX + 5, centerY + (i*marginY), RAYWHITE);
             DrawLine(centerX - 5, centerY - (i*marginY), centerX + 5, centerY - (i*marginY), RAYWHITE);
@@ -59,7 +65,7 @@ void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
         }
         
         double scale = (centerY - marginY) / roundedMax;
-
+        // Draw vehicle trajectory
         for (int i = 0; i < vehicle.x.size(); i++){
             DrawCircle(centerX + vehicle.x[i] * scale, centerY - vehicle.y[i]* scale , 1, YELLOW);
         }

@@ -23,6 +23,7 @@ Vehicle::Vehicle(double x, double y, double theta, double velocity, double accel
         this->velocity.push_back(velocity);
     }
 
+// Update vehicle position based on kinematic bicycle model
 void Vehicle::updatePosition(){
     velocity.push_back(velocity.back() + acceleration * dt);
     theta.push_back(theta.back() + (velocity.back() / L) * tan(delta) * dt);
@@ -30,6 +31,7 @@ void Vehicle::updatePosition(){
     y.push_back(y.back() + velocity.back() * sin(theta.back()) * dt);
 }
 
+// Apply lateral drift to the vehicle's position
 void Vehicle::applyLateralDrift(Environment& environment){
     x.back() = x.back() - environment.lateralDrift * sin(theta.back()) * dt;
     y.back() = y.back() + environment.lateralDrift * cos(theta.back()) * dt;

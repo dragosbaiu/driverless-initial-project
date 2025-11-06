@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdlib>
 
+// Generate Gaussian noise using Box-Muller transform (method that is efficient for generating normally distributed random numbers)
 double generateGaussianNoise(double mean, double standardDeviation){
     
     static bool hasSpare = false;

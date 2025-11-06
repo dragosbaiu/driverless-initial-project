@@ -6,6 +6,6 @@ struct Environment;
 struct Controller;
 
 double proportionalControl(Controller& controller, double targetHeadingAngle, double currentHeadingAngle);
-double computeCrossTrackError(Vehicle& vehicle);
+double computeDriftError(Vehicle& vehicle);
 double proportionalControlWithLateralDrift(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle);
 #endif

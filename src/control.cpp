@@ -4,7 +4,7 @@
 #include "controller.hpp"
 #include <cmath>
 
-
+// Proportional control to compute steering angle based on heading error
 double proportionalControl(Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
     
     double error = targetHeadingAngle - currentHeadingAngle;
@@ -18,15 +18,17 @@ double proportionalControl(Controller& controller, double targetHeadingAngle, do
     return steeringAngle;
 }
 
-double computeCrossTrackError(Vehicle& vehicle){
+// Compute drift error based on vehicle's current position and heading
+double computeDriftError(Vehicle& vehicle){
     return (-sin(vehicle.theta.front()) * (vehicle.x.back() - vehicle.x.front())) +
             ( cos(vehicle.theta.front()) * (vehicle.y.back() - vehicle.y.front()));
 }
 
+// Proportional control considering both heading error and lateral drift to compute steering angle
 double proportionalControlWithLateralDrift(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
     
     double error = targetHeadingAngle - currentHeadingAngle;
-    double errorDrift = computeCrossTrackError(vehicle);
+    double errorDrift = computeDriftError(vehicle);
     double steeringAngle = controller.Kp * error - controller.Ky * errorDrift;
 
     if (steeringAngle > controller.maxSteeringAngle) {

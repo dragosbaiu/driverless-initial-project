@@ -5,6 +5,8 @@
 
 struct Environment;
 
+// Vehicle class representing the kinematic bicycle model
+
 class Vehicle {
     public:
         std::vector <double> x, y, theta, velocity;

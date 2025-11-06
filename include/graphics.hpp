@@ -3,6 +3,6 @@
 
 class Vehicle;
 
-void run_app(const Vehicle& vehicle, double roundedMax);
+void runApp(const Vehicle& vehicle, double roundedMax);
 
 #endif

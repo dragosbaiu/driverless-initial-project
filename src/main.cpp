@@ -2,6 +2,8 @@
 #include "io.hpp"
 #include "sim.hpp"
 #include "graphics.hpp"
+#include "control.hpp"
+#include "noise.hpp"
 #include <iostream>
 
 using namespace std;
@@ -10,13 +12,18 @@ int main() {
     
     Vehicle vehicle;
 
-    if (!read_input("data/input.txt", vehicle)) {
+    if (!readInput("data/input.txt", vehicle)) {
         return 1;
     }
 
-    double roundedMax = simulate_and_get_rounded_max(vehicle, 100);
+    Vehicle standardVehicle = vehicle;
+    Vehicle noisyVehicle = vehicle;
 
-    run_app(vehicle, roundedMax);
+    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, 100);
+    runApp(standardVehicle, roundedStandardMax);
+
+    double roundedNoisyMax = simulateStraightPathAndGetRoundedMax(noisyVehicle, 100);
+    runApp(noisyVehicle, roundedNoisyMax);
 
     return 0;
 }

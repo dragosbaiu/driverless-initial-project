@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool read_input(const string& path, Vehicle& vehicle){
+bool readInput(const string& path, Vehicle& vehicle){
     fstream file (path);
     if (!file){
         cerr << "Unable to open file " << path << '\n';

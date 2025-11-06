@@ -4,6 +4,6 @@
 #include <string>
 class Vehicle;
 
-bool read_input(const std::string& path, Vehicle& vehicle);
+bool readInput(const std::string& path, Vehicle& vehicle);
 
 #endif

@@ -2,16 +2,17 @@
 #include "vehicle.hpp"
 #include "controller.hpp"
 #include "environment.hpp"
+#include "path.hpp"
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
 // Read vehicle, controller, and environment parameters from input file
-bool readInput(const string& path, Vehicle& vehicle, Controller& controller, Environment& environment) {
-    fstream file (path);
+bool readInput(const string& filePath, Vehicle& vehicle, Controller& controller, Environment& environment) {
+    fstream file (filePath);
     if (!file){
-        cerr << "Unable to open file " << path << '\n';
+        cerr << "Unable to open file " << filePath << '\n';
         return false;
     }
 
@@ -22,7 +23,7 @@ bool readInput(const string& path, Vehicle& vehicle, Controller& controller, Env
     file >> controller.Ky >> environment.steps >> controller.mean >> controller.standardDeviation;
 
     if (!file){
-        cerr << "Input format error in " << path << '\n';
+        cerr << "Input format error in " << filePath << '\n';
         return false;
     }
 

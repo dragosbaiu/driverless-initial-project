@@ -4,9 +4,10 @@
 #include <string>
 
 class Vehicle;
+class Path;
 struct Controller;
 struct Environment;
 
-bool readInput(const std::string& path, Vehicle& vehicle, Controller& controller, Environment& environment);
+bool readInput(const std::string& filePath, Vehicle& vehicle, Controller& controller, Environment& environment);
 
 #endif

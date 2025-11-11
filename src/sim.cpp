@@ -1,5 +1,6 @@
 #include "sim.hpp"
 #include "vehicle.hpp"
+#include "path.hpp"
 #include "control.hpp"
 #include "environment.hpp"
 #include "controller.hpp"
@@ -93,3 +94,50 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
     return ceil(max);
 }
 
+// Generation of a straight path and returns the rounded maximum distance from origin
+double simulateStraightPath (Path& path, Environment& environment){
+    double max = 0.0;
+    path.generateStraightPath();
+    for (int i = 1; i < path.x.size(); i++){
+        if (abs(path.x[i]) > max){
+            max = abs(path.x[i]);
+        }
+        if (abs(path.y[i]) > max){
+            max = abs(path.y[i]);
+        }
+    }
+
+    return ceil(max);
+}
+
+// Generation of a circle path and returns the rounded maximum distance from origin
+double simulateCirclePath (Path& path, Environment& environment){
+    double max = 0.0;
+    path.generateCirclePath();
+    for (int i = 1; i < path.x.size(); i++){
+        if (abs(path.x[i]) > max){
+            max = abs(path.x[i]);
+        }
+        if (abs(path.y[i]) > max){
+            max = abs(path.y[i]);
+        }
+    }
+
+    return ceil(max);
+}
+
+// Generation of a sine path and returns the rounded maximum distance from origin
+double simulateSinePath (Path& path, Environment& environment){
+    double max = 0.0;
+    path.generateSinePath();
+    for (int i = 1; i < path.x.size(); i++){
+        if (abs(path.x[i]) > max){
+            max = abs(path.x[i]);
+        }
+        if (abs(path.y[i]) > max){
+            max = abs(path.y[i]);
+        }
+    }
+
+    return ceil(max);
+}

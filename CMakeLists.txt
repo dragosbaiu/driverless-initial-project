@@ -16,6 +16,7 @@ set(SOURCES
     src/sim.cpp
     src/control.cpp
     src/noise.cpp
+    src/path.cpp
 )
 
 add_executable(driverless-initial-project ${SOURCES})

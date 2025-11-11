@@ -6,6 +6,7 @@
 #include "noise.hpp"
 #include "controller.hpp"
 #include "environment.hpp"
+#include "path.hpp"
 #include <iostream>
 
 using namespace std;
@@ -41,6 +42,21 @@ int main() {
     // Simulate and visualize controlled bicycle model with noise and lateral drift
     double roundedControlledDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(controlledVehicleWithDrift, environment, controller);
     runApp(controlledVehicleWithDrift, roundedControlledDriftMax, "Trajectory of Controlled Bicycle with Noise and Lateral Drift");
+
+    // Generate and visualize a straight path, with fields: x, y, theta, lenght, dt
+    Path path(1, 1, 1, 5, vehicle.dt);
+    double roundedStraightPathMax = simulateStraightPath(path, environment);
+    runApp(path, roundedStraightPathMax, "Generated Straight Path");
+
+    // Generate and visualize a circle path, with fields: centerX, centerY, radius, dt
+    Path circlePath(0, 0, 10, vehicle.dt);
+    double roundedCirclePathMax = simulateCirclePath(circlePath, environment);
+    runApp(circlePath, roundedCirclePathMax, "Generated Circle Path");
+
+    // Generate and visualize a sine path, with fields: x, y, heading, amplitude, wavelength, length (along that heading), dt
+    Path sinePath(0, 0, 1, 10, 20, 50, vehicle.dt);
+    double roundedSinePathMax = simulateSinePath(sinePath, environment);
+    runApp(sinePath, roundedSinePathMax, "Generated Sine Path");
 
     return 0;
 }

@@ -4,7 +4,9 @@
 #include <string>
 
 class Vehicle;
+class Path;
 
 void runApp(Vehicle& vehicle, double roundedMax, std::string windowTitle);
+void runApp(Path& path, double roundedMax, std::string windowTitle);
 
 #endif

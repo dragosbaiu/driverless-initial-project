@@ -14,3 +14,5 @@ steps - steps
 steps for path following
 mean - Used for Gaussian noise
 standardDeviation - Used for Gausiann noise
+Ki - Integral Gain
+Kd - Derivative Gain

@@ -11,4 +11,6 @@ double computeDriftError(Vehicle& vehicle);
 double computeHeadingAndDriftCorrection(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle);
 double computeCrossTrackError(Vehicle& vehicle, Path& path);
 double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller& controller);
+double computeSteeringForPathFollowingPID(Vehicle& vehicle, Path& path, Controller& controller);
+void resetPathPIDState(Controller& controller);
 #endif

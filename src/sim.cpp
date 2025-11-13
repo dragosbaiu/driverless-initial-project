@@ -142,14 +142,12 @@ double simulateSinePath(Path& path, Environment& environment){
 
 // Simulate vehicle following a given path using path following control and returns the rounded maximum distance from origin
 // (Task 3)
-double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path,
-                                             Environment& environment, Controller& controller) {
+double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
 
     double max = 0.0;
 
     for (int i = 0; i < environment.stepsPathFollowing; i++) {
 
-        // Find the closest point on the path to the vehicle
         double vx = vehicle.x.back();
         double vy = vehicle.y.back();
 
@@ -166,12 +164,50 @@ double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path,
             }
         }
 
-        // If the closest point is among the last points of the path then the simulation stops
         if (closestIndex >= (int)path.x.size() - 2 && i > 5) {
             break;
         }
 
         vehicle.delta = computeSteeringForPathFollowingP(vehicle, path, controller);
+        vehicle.updatePosition();
+        vehicle.applyLateralDrift(environment);
+
+        if (abs(vehicle.x.back()) > max) max = abs(vehicle.x.back());
+        if (abs(vehicle.y.back()) > max) max = abs(vehicle.y.back());
+    }
+
+    return ceil(max);
+}
+
+// Simulate vehicle following a given path using PID path following control and returns the rounded maximum distance from origin
+// (Task 4)
+double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
+
+    double max = 0.0;
+
+    for (int i = 0; i < environment.stepsPathFollowing; i++) {
+
+        double vx = vehicle.x.back();
+        double vy = vehicle.y.back();
+
+        int closestIndex = 0;
+        double minDist2 = 1e9;
+
+        for (int k = 0; k < (int)path.x.size(); ++k) {
+            double dx = vx - path.x[k];
+            double dy = vy - path.y[k];
+            double dist2 = dx*dx + dy*dy;
+            if (dist2 < minDist2) {
+                minDist2 = dist2;
+                closestIndex = k;
+            }
+        }
+
+        if (closestIndex >= (int)path.x.size() - 2 && i > 5) {
+            break;
+        }
+
+        vehicle.delta = computeSteeringForPathFollowingPID(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
 

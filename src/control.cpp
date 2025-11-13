@@ -85,7 +85,7 @@ double computeCrossTrackError(Vehicle& vehicle, Path& path){
     return crossTrackError;
 }
 
-// Compute steering angle for path following using cross-track error and controller gain
+// Compute steering angle for path following using P control
 double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller& controller){
     double crossTrackError = computeCrossTrackError(vehicle, path);
     double steeringAngle = controller.Kpx* crossTrackError;
@@ -95,5 +95,38 @@ double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller
     } else if (steeringAngle < -controller.maxSteeringAngle) {
         steeringAngle = -controller.maxSteeringAngle;
     }
+    return steeringAngle;
+}
+
+// Reset the PID controller state for path following
+void resetPathPIDState(Controller& controller) {
+    controller.integralError = 0.0;
+    controller.previousError = 0.0;
+    controller.firstUpdate = true;
+}
+
+// Compute steering angle for path following using PID control
+double computeSteeringForPathFollowingPID(Vehicle& vehicle, Path& path, Controller& controller) {
+    double crossTrackError = computeCrossTrackError(vehicle, path);
+
+    controller.integralError += crossTrackError * vehicle.dt;
+
+    double derivative = 0.0;
+    if (!controller.firstUpdate) {
+        derivative = (crossTrackError - controller.previousError) / vehicle.dt;
+    } else {
+        controller.firstUpdate = false;
+    }
+
+    controller.previousError = crossTrackError;
+
+    double steeringAngle = controller.Kpx * crossTrackError + controller.Ki  * controller.integralError + controller.Kd  * derivative;
+
+    if (steeringAngle > controller.maxSteeringAngle) {
+        steeringAngle = controller.maxSteeringAngle;
+    } else if (steeringAngle < -controller.maxSteeringAngle) {
+        steeringAngle = -controller.maxSteeringAngle;
+    }
+
     return steeringAngle;
 }

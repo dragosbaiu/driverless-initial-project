@@ -36,3 +36,15 @@ void Vehicle::applyLateralDrift(Environment& environment){
     x.back() = x.back() - environment.lateralDrift * sin(theta.back()) * dt;
     y.back() = y.back() + environment.lateralDrift * cos(theta.back()) * dt;
 }
+
+void Vehicle::setInitialX(double newX){
+    x[0] = newX;
+}
+
+void Vehicle::setInitialY(double newY){
+    y[0] = newY;
+}
+
+void Vehicle::setInitialTheta(double newTheta){
+    theta[0] = newTheta;
+}

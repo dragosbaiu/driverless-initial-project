@@ -77,7 +77,8 @@ void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
     CloseWindow();
 }
 
-void runApp(Path& path, double roundedMax, string windowTitle) {
+// Run the graphical application to visualize the path trajectory
+void runApp(Vehicle& vehicle, Path& path, double roundedMax, string windowTitle) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 600, windowTitle.c_str());
     SetTargetFPS(60);
@@ -127,7 +128,10 @@ void runApp(Path& path, double roundedMax, string windowTitle) {
         for (int i = 0; i < path.x.size(); i++){
             DrawCircle(centerX + path.x[i] * scale, centerY - path.y[i]* scale , 2, BLUE);
         }
-
+        // Draw vehicle position
+        for (int i = 0; i < vehicle.x.size(); i++) {
+            DrawCircle(centerX + vehicle.x[i] * scale, centerY - vehicle.y[i] * scale, 1, YELLOW);
+        }
         EndDrawing();
     }
 

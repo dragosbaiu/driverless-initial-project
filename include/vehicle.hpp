@@ -15,6 +15,9 @@ class Vehicle {
         Vehicle();
         void updatePosition();
         void applyLateralDrift(Environment& environment);
+        void setInitialX(double newX);
+        void setInitialY(double newY);
+        void setInitialTheta(double newTheta);
 };
 
 #endif

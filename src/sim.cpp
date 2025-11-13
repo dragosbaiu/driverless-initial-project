@@ -142,7 +142,7 @@ double simulateSinePath(Path& path, Environment& environment){
 
 // Simulate vehicle following a given path using path following control and returns the rounded maximum distance from origin
 // (Task 3)
-double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path,
+double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path,
                                              Environment& environment, Controller& controller) {
 
     double max = 0.0;
@@ -171,7 +171,7 @@ double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path,
             break;
         }
 
-        vehicle.delta = computeSteeringForPathFollowing(vehicle, path, controller);
+        vehicle.delta = computeSteeringForPathFollowingP(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
 

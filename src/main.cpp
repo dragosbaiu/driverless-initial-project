@@ -62,7 +62,7 @@ int main() {
     controlledVehicleWithPredefinedStraightPath.setInitialX(path.x.front());
     controlledVehicleWithPredefinedStraightPath.setInitialY(path.y.front());
 
-    double vehicleRoundedStraightPathMax = simulatePathFollowingAndGetRoundedMax(controlledVehicleWithPredefinedStraightPath, path, environment, controller);
+    double vehicleRoundedStraightPathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedStraightPath, path, environment, controller);
     runApp(controlledVehicleWithPredefinedStraightPath, path, max (roundedStraightPathMax, vehicleRoundedStraightPathMax), "Generated Straight Path And Controlled Vehicle Trajectory");
 
     double radius = 5;
@@ -80,7 +80,7 @@ int main() {
     controlledVehicleWithPredefinedCircularPath.setInitialX(circlePath.x.front());
     controlledVehicleWithPredefinedCircularPath.setInitialY(circlePath.y.front());
 
-    double vehicleRoundedCirclePathMax = simulatePathFollowingAndGetRoundedMax(controlledVehicleWithPredefinedCircularPath, circlePath, environment, controller);
+    double vehicleRoundedCirclePathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedCircularPath, circlePath, environment, controller);
     runApp(controlledVehicleWithPredefinedCircularPath, circlePath, max(vehicleRoundedCirclePathMax, roundedCirclePathMax), "Generated Circle Path And Controlled Vehicle Trajectory");
 
     
@@ -98,7 +98,7 @@ int main() {
     controlledVehicleWithPredefinedSinePath.setInitialX(sinePath.x.front());
     controlledVehicleWithPredefinedSinePath.setInitialY(sinePath.y.front());
 
-    double vehicleRoundedSinePathMax = simulatePathFollowingAndGetRoundedMax(controlledVehicleWithPredefinedSinePath, sinePath, environment, controller);
+    double vehicleRoundedSinePathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedSinePath, sinePath, environment, controller);
     runApp(controlledVehicleWithPredefinedSinePath ,sinePath, max(vehicleRoundedSinePathMax, roundedSinePathMax), "Generated Sine Path And Controlled Vehicle Trajectory");
 
     return 0;

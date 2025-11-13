@@ -32,7 +32,7 @@ double computeHeadingAndDriftCorrection(Vehicle& vehicle, Environment& environme
     
     double error = targetHeadingAngle - currentHeadingAngle;
     double errorDrift = computeDriftError(vehicle);
-    double steeringAngle = controller.Kp * error - controller.Ky * errorDrift;
+    double steeringAngle = controller.Kp * error - controller.Kpx * errorDrift;
 
     if (steeringAngle > controller.maxSteeringAngle) {
         steeringAngle = controller.maxSteeringAngle;
@@ -86,9 +86,9 @@ double computeCrossTrackError(Vehicle& vehicle, Path& path){
 }
 
 // Compute steering angle for path following using cross-track error and controller gain
-double computeSteeringForPathFollowing(Vehicle& vehicle, Path& path, Controller& controller){
+double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller& controller){
     double crossTrackError = computeCrossTrackError(vehicle, path);
-    double steeringAngle = controller.Ky* crossTrackError;
+    double steeringAngle = controller.Kpx* crossTrackError;
 
     if (steeringAngle > controller.maxSteeringAngle) {
         steeringAngle = controller.maxSteeringAngle;

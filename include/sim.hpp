@@ -17,6 +17,6 @@ double simulateStraightPath(Path& path, Environment& environment);
 double simulateCirclePath(Path& path, Environment& environment);
 double simulateSinePath(Path& path, Environment& environment);
 
-double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller); 
+double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller); 
 
 #endif

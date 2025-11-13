@@ -9,7 +9,7 @@ L - Wheelbase
 Kp - Proportional Gain for Heading Error
 maxSteeringAngle - maximumSteeringAngle
 lateralDrift - lateralDrift
-Ky - Lateral Correction Gain
+Kpx - Lateral Correction Gain
 steps - steps
 steps for path following
 mean - Used for Gaussian noise

@@ -143,20 +143,38 @@ double simulateSinePath (Path& path, Environment& environment){
 
 // Simulate vehicle following a given path using path following control and returns the rounded maximum distance from origin
 // (Task 3)
-double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
+double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path,
+                                             Environment& environment, Controller& controller) {
     double max = 0.0;
 
     for (int i = 0; i < environment.steps; i++) {
 
-        // --- Stop condition: vehicle close to last point ---
-        double dx_end = vehicle.x.back() - path.x.back();
-        double dy_end = vehicle.y.back() - path.y.back();
-        double dist_to_end = std::sqrt(dx_end * dx_end + dy_end * dy_end);
-        if (dist_to_end < vehicle.dt * vehicle.velocity.back() && i > 3) { 
+        // --- Find closest point on path to current vehicle position ---
+        double vx = vehicle.x.back();
+        double vy = vehicle.y.back();
+
+        int closestIndex = 0;
+        double minDist2 = 1e9;
+
+        for (int k = 0; k < (int)path.x.size(); ++k) {
+            double dx = vx - path.x[k];
+            double dy = vy - path.y[k];
+            double dist2 = dx*dx + dy*dy;
+            if (dist2 < minDist2) {
+                minDist2 = dist2;
+                closestIndex = k;
+            }
+        }
+
+        // If the closest point is among the last points of the path, stop the simulation
+        if (closestIndex >= (int)path.x.size() - 2 && i > 5) {
             break;
         }
+
+        // Path-following control + vehicle update
         vehicle.delta = computeSteeringForPathFollowing(vehicle, path, controller);
         vehicle.updatePosition();
+        vehicle.applyLateralDrift(environment);
 
         if (abs(vehicle.x.back()) > max) max = abs(vehicle.x.back());
         if (abs(vehicle.y.back()) > max) max = abs(vehicle.y.back());

@@ -47,7 +47,7 @@ void Path::generateStraightPath() {
 
     int steps = static_cast<int>(length / dt);
 
-    for (int i = 0; i < steps; ++i) {
+    for (int i = 1; i < steps; ++i) {
         x.push_back(x.back() + cos(heading) * dt);
         y.push_back(y.back() + sin(heading) * dt);
     }
@@ -74,7 +74,7 @@ void Path::generateSinePath() {
     double y0 = y.back();
     double heading = theta.back();
 
-    for (int i = 0; i <= steps; ++i) {
+    for (int i = 1; i <= steps; ++i) {
         x.push_back(x0 + i * dt * cos(heading) - amplitude * sin((2.0 * M_PI / wavelength) * i * dt) * sin(heading));
         y.push_back(y0 + i * dt * sin(heading) + amplitude * sin((2.0 * M_PI / wavelength) * i * dt) * cos(heading));
     }

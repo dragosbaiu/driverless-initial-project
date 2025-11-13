@@ -51,7 +51,7 @@ int main() {
     double initialX = 0;
     double initialY = 0;
     // Generate and visualize a straight path, with fields: x, y, theta, lenght, dt
-    Path path(initialX, initialY, 1, 5, vehicle.dt*3);
+    Path path(initialX, initialY, 1, 5, vehicle.dt*1.5);
 
     double roundedStraightPathMax = simulateStraightPath(path, environment);
     if (path.x.size() >= 2) {
@@ -87,7 +87,7 @@ int main() {
     initialX = 0;
     initialY = 0;
     // Generate and visualize a sine path, with fields: x, y, heading, amplitude, wavelength, length (along that heading), dt
-    Path sinePath(0, 0, 0, 5, 15, 40, vehicle.dt*2);
+    Path sinePath(initialX, initialY, 0, 5, 15, 40, vehicle.dt*2);
 
     double roundedSinePathMax = simulateSinePath(sinePath, environment);
     if (sinePath.x.size() >= 2) {

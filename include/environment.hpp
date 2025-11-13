@@ -5,6 +5,7 @@
 struct Environment{
     double lateralDrift;
     int steps;
+    int stepsPathFollowing;
 };
 
 #endif

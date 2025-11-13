@@ -11,5 +11,6 @@ maxSteeringAngle - maximumSteeringAngle
 lateralDrift - lateralDrift
 Ky - Lateral Correction Gain
 steps - steps
+steps for path following
 mean - Used for Gaussian noise
 standardDeviation - Used for Gausiann noise

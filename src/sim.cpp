@@ -76,7 +76,6 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
 
     for (int i = 0; i < environment.steps; i++){
         // Add Gaussian noise to the current heading angle
-        // The noise simulates the error in a heading sensor
         double noisyHeading = vehicle.theta.back() + generateGaussianNoise(controller);
         // Compute steering angle using proportional control, taking lateral drift and noise into consideration
         vehicle.delta = computeHeadingAndDriftCorrection(vehicle, environment, controller, targetHeadingAngle, noisyHeading);
@@ -94,7 +93,7 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
 }
 
 // Generation of a straight path and returns the rounded maximum distance from origin
-double simulateStraightPath (Path& path, Environment& environment){
+double simulateStraightPath(Path& path, Environment& environment){
     double max = 0.0;
     path.generateStraightPath();
     for (int i = 1; i < path.x.size(); i++){
@@ -110,7 +109,7 @@ double simulateStraightPath (Path& path, Environment& environment){
 }
 
 // Generation of a circle path and returns the rounded maximum distance from origin
-double simulateCirclePath (Path& path, Environment& environment){
+double simulateCirclePath(Path& path, Environment& environment){
     double max = 0.0;
     path.generateCirclePath();
     for (int i = 1; i < path.x.size(); i++){
@@ -126,7 +125,7 @@ double simulateCirclePath (Path& path, Environment& environment){
 }
 
 // Generation of a sine path and returns the rounded maximum distance from origin
-double simulateSinePath (Path& path, Environment& environment){
+double simulateSinePath(Path& path, Environment& environment){
     double max = 0.0;
     path.generateSinePath();
     for (int i = 1; i < path.x.size(); i++){
@@ -145,11 +144,12 @@ double simulateSinePath (Path& path, Environment& environment){
 // (Task 3)
 double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path,
                                              Environment& environment, Controller& controller) {
+
     double max = 0.0;
 
-    for (int i = 0; i < environment.steps; i++) {
+    for (int i = 0; i < environment.stepsPathFollowing; i++) {
 
-        // --- Find closest point on path to current vehicle position ---
+        // Find the closest point on the path to the vehicle
         double vx = vehicle.x.back();
         double vy = vehicle.y.back();
 
@@ -166,12 +166,11 @@ double simulatePathFollowingAndGetRoundedMax(Vehicle& vehicle, Path& path,
             }
         }
 
-        // If the closest point is among the last points of the path, stop the simulation
+        // If the closest point is among the last points of the path then the simulation stops
         if (closestIndex >= (int)path.x.size() - 2 && i > 5) {
             break;
         }
 
-        // Path-following control + vehicle update
         vehicle.delta = computeSteeringForPathFollowing(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);

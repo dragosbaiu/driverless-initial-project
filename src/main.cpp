@@ -34,6 +34,7 @@ int main() {
     Vehicle controlledPIDVehicleWithPredefinedStraightPath = vehicle;
     Vehicle controlledPIDVehicleWithPredefinedCircularPath = vehicle;
     Vehicle controlledPIDVehicleWithPredefinedSinePath = vehicle;
+    Vehicle controlledPIDVehicleWithPredefinedSharpTurnPath = vehicle;
 
     // Simulate and visualize standard bicycle model
     double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, environment);
@@ -161,8 +162,25 @@ int main() {
     double vehiclePIDRoundedSinePathMax = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedSinePath, sinePathPID, environment, controller);
     runApp(controlledPIDVehicleWithPredefinedSinePath ,sinePathPID, max(vehiclePIDRoundedSinePathMax, roundedSinePathMaxPID), "Generated Sine Path And PID Controlled Vehicle Trajectory");
 
+    initialX = 0;
+    initialY = 0;
+    // Generate and visualize a chicane turn path, with fields: x, y, heading, radius, entryLenght, middleLenght, finalLenght, dt
+    // Uses PID controller to follow the path
+    Path chicanePath(initialX, initialY, 0, 5, 12, 6, 12, vehicle.dt*2);
+    resetPathPIDState(controller);
+    double roundedSharpTurnPathMaxPID = simulateChicanePath(chicanePath, environment);
+    if (chicanePath.x.size() >= 2) {
+        controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialTheta(atan2(chicanePath.y[1] - chicanePath.y[0], chicanePath.x[1] - chicanePath.x[0]));
+    } else {
+        controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialTheta(0);
+    }
+    controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialX(chicanePath.x.front());
+    controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialY(chicanePath.y.front());   
+
+    double vehiclePIDRoundedSharpTurnPathMax = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedSharpTurnPath, chicanePath, environment, controller);
+    runApp(controlledPIDVehicleWithPredefinedSharpTurnPath ,chicanePath, max(vehiclePIDRoundedSharpTurnPathMax, roundedSharpTurnPathMaxPID), "Generated Sharp Turn Path And PID Controlled Vehicle Trajectory");
+
     return 0;
 }
-
 
 

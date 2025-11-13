@@ -217,3 +217,17 @@ double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, En
 
     return ceil(max);
 }
+
+double simulateChicanePath(Path& path, Environment& environment)
+{
+    double max = 0.0;
+
+    path.generateChicanePath();
+
+    for (size_t i = 0; i < path.x.size(); ++i) {
+        if (abs(path.x[i]) > max) max = abs(path.x[i]);
+        if (abs(path.y[i]) > max) max = abs(path.y[i]);
+    }
+
+    return ceil(max);
+}

@@ -6,20 +6,18 @@ class Path;
 struct Controller;
 struct Environment;
 
-// Simulation functions to simulate vehicle movement and return rounded maximum distance from origin
-
-double simulateAndGetRoundedMax(Vehicle& vehicle, Environment& environment);
-double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment);
-double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller);
-double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller);
+double simulateBase(Vehicle& vehicle, Environment& environment);
+double simulateBaseDrift(Vehicle& vehicle, Environment& environment);
+double simulateHeadingStraight(Vehicle& vehicle, Environment& environment, Controller& controller);
+double simulateHeadingStraightDrift(Vehicle& vehicle, Environment& environment, Controller& controller);
 
 double simulateStraightPath(Path& path, Environment& environment);
-double simulateCirclePath(Path& path, Environment& environment);
+double simulateCircularPath(Path& path, Environment& environment);
 double simulateSinePath(Path& path, Environment& environment);
 
-double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller); 
-double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller);
+double simulateP(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller); 
+double simulatePID(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller);
 double simulateChicanePath(Path& path, Environment& environment);
-double simulatePathFollowingStanleyAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller);
+double simulateStanley(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller);
 
 #endif

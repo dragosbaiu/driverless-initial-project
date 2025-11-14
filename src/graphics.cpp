@@ -77,7 +77,7 @@ void runApp(Vehicle& vehicle, double roundedMax, string windowTitle) {
     CloseWindow();
 }
 
-// Run the graphical application to visualize the path trajectory
+// Run the graphical application to visualize the path and the vehicle trajectory
 void runApp(Vehicle& vehicle, Path& path, double roundedMax, string windowTitle) {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(800, 600, windowTitle.c_str());

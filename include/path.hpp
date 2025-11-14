@@ -16,7 +16,7 @@ class Path {
         Path(double x, double y, double theta, double amplitude, double wavelength, double length, double dt);
         Path(double x, double y, double theta, double radius, double entryStraight, double middleStraight, double exitStraight, double dt);
         void generateStraightPath();
-        void generateCirclePath();
+        void generateCircularPath();
         void generateSinePath();
         void generateChicanePath();
 

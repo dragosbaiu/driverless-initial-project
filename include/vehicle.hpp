@@ -4,8 +4,7 @@
 #include <vector>
 
 struct Environment;
-
-// Vehicle class representing the kinematic bicycle model
+class Path;
 
 class Vehicle {
     public:
@@ -17,7 +16,8 @@ class Vehicle {
         void applyLateralDrift(Environment& environment);
         void setInitialX(double newX);
         void setInitialY(double newY);
-        void setInitialTheta(double newTheta);
+        void setTheta(double newTheta);
+        void setInitialTheta(Path& path);
 };
 
 #endif

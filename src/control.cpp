@@ -7,8 +7,11 @@
 
 using namespace std;
 
+// Find the optimal steering angle based on different controllers.
+
 // Proportional control to compute steering angle based on heading error and keep the vehicle on a straight path
-double computeHeadingCorrection(Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
+// (Task 2)
+double steerHeading(Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
     
     double error = targetHeadingAngle - currentHeadingAngle;
     double steeringAngle = controller.Kp * error;
@@ -22,13 +25,15 @@ double computeHeadingCorrection(Controller& controller, double targetHeadingAngl
 }
 
 // Compute drift error based on vehicle's current position and heading
+// (Task 2)
 double computeDriftError(Vehicle& vehicle){
     return (-sin(vehicle.theta.front()) * (vehicle.x.back() - vehicle.x.front())) +
             ( cos(vehicle.theta.front()) * (vehicle.y.back() - vehicle.y.front()));
 }
 
 // Proportional control considering both heading error and lateral drift to compute steering angle and keep the vehicle on a straight path
-double computeHeadingAndDriftCorrection(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
+// (Task 2)
+double steerHeadingDrift(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle){
     
     double error = targetHeadingAngle - currentHeadingAngle;
     double errorDrift = computeDriftError(vehicle);
@@ -43,6 +48,7 @@ double computeHeadingAndDriftCorrection(Vehicle& vehicle, Environment& environme
 }
 
 // Compute cross-track error between vehicle position and the predefined path
+// (Task 3 & Task 4)
 double computeCrossTrackError(Vehicle& vehicle, Path& path){
     // Closest point on path to vehicle
     double minDistance = 1e9;
@@ -86,7 +92,8 @@ double computeCrossTrackError(Vehicle& vehicle, Path& path){
 }
 
 // Compute steering angle for path following using P control
-double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller& controller){
+// Task 3
+double steerHeadingP(Vehicle& vehicle, Path& path, Controller& controller){
     double crossTrackError = computeCrossTrackError(vehicle, path);
     double steeringAngle = controller.Kpx* crossTrackError;
 
@@ -101,6 +108,7 @@ double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller
 
 
 // Reset the PID controller state for path following
+// (Task 4)
 void resetPathPIDState(Controller& controller) {
     controller.integralError = 0.0;
     controller.previousError = 0.0;
@@ -108,7 +116,8 @@ void resetPathPIDState(Controller& controller) {
 }
 
 // Compute steering angle for path following using PID control
-double computeSteeringForPathFollowingPID(Vehicle& vehicle, Path& path, Controller& controller) {
+// (Task 4)
+double steerHeadingPID(Vehicle& vehicle, Path& path, Controller& controller) {
     double crossTrackError = computeCrossTrackError(vehicle, path);
 
     controller.integralError += crossTrackError * vehicle.dt;
@@ -134,6 +143,7 @@ double computeSteeringForPathFollowingPID(Vehicle& vehicle, Path& path, Controll
 }
 
 // Compute cross-track error and path heading angle (Same as the other function but returns the path heading as well)
+// (Task 5)
 PathError computeCrossTrackErrorAndPathHeading(Vehicle& vehicle, Path& path){
 
     PathError result;
@@ -182,6 +192,7 @@ PathError computeCrossTrackErrorAndPathHeading(Vehicle& vehicle, Path& path){
 }
 
 // Keep angle in between -pi and pi
+// (Task 5)
 double normalizeAngle(double angle) {
     while (angle > M_PI)  angle -= 2.0 * M_PI;
     while (angle < -M_PI) angle += 2.0 * M_PI;
@@ -189,7 +200,8 @@ double normalizeAngle(double angle) {
 }
 
 // Compute steering angle for path following using Stanely control
-double computeSteeringForStanley(Vehicle& vehicle, Path& path, Controller& controller) {
+// (Task 5)
+double steerHeadingStanley(Vehicle& vehicle, Path& path, Controller& controller) {
 
     PathError err = computeCrossTrackErrorAndPathHeading(vehicle, path);
     double e = err.crossTrackError;
@@ -201,12 +213,12 @@ double computeSteeringForStanley(Vehicle& vehicle, Path& path, Controller& contr
 
     double v = vehicle.velocity.back(); 
 
-    v = std::fabs(v);
+    v = fabs(v);
     if (v < 0.1) {
         v = 0.1;  
     }
 
-    double stanleyTerm = std::atan2(controller.Ks * e, v);
+    double stanleyTerm = atan2(controller.Ks * e, v);
     double steeringAngle = headingError + stanleyTerm;
 
     if (steeringAngle > controller.maxSteeringAngle) {

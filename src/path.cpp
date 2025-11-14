@@ -63,7 +63,7 @@ void Path::generateStraightPath() {
 }
 
 // Generate a circular path
-void Path::generateCirclePath() {
+void Path::generateCircularPath() {
         
     const int steps = static_cast<int>((2 * M_PI) / (dt / radius));
 

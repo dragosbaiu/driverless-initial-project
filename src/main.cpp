@@ -23,225 +23,153 @@ int main() {
         return 1;
     }
 
-    // Create copies of the vehicle for different simulation scenarios
-    Vehicle standardVehicle = vehicle;
-    Vehicle standardVehicleWithDrift = vehicle;
-    Vehicle controlledVehicle = vehicle;
-    Vehicle controlledVehicleWithDrift = vehicle;
-    Vehicle controlledVehicleWithPredefinedStraightPath = vehicle;
-    Vehicle controlledVehicleWithPredefinedCircularPath = vehicle;
-    Vehicle controlledVehicleWithPredefinedSinePath = vehicle;
-    Vehicle controlledPIDVehicleWithPredefinedStraightPath = vehicle;
-    Vehicle controlledPIDVehicleWithPredefinedCircularPath = vehicle;
-    Vehicle controlledPIDVehicleWithPredefinedSinePath = vehicle;
-    Vehicle controlledPIDVehicleWithPredefinedSharpTurnPath = vehicle;
-    Vehicle controlledStanleyVehicleWithPredefinedStraightPath = vehicle;
-    Vehicle controlledStanleyVehicleWithPredefinedCircularPath = vehicle;
-    Vehicle controlledStanleyVehicleWithPredefinedSinePath = vehicle;
-    Vehicle controlledStanleyVehicleWithPredefinedSharpTurnPath = vehicle;
+    double pathRoundedMax;
+    double roundedMax;
 
     // Simulate and visualize standard bicycle model
-    double roundedStandardMax = simulateAndGetRoundedMax(standardVehicle, environment);
-    runApp(standardVehicle, roundedStandardMax, "Trajectory of Standard Bicycle Model");
+    Vehicle base = vehicle;
+    roundedMax = simulateBase(base, environment);
+    runApp(base, roundedMax, "Trajectory of Standard Bicycle Model");
 
     // Simulate and visualize bicycle model with lateral drift
-    double roundedDriftMax = simulateWithDriftAndGetRoundedMax(standardVehicleWithDrift, environment);
-    runApp(standardVehicleWithDrift, roundedDriftMax, "Trajectory of Bicycle with Lateral Drift");
+    Vehicle baseDrift = vehicle;
+    roundedMax = simulateBaseDrift(baseDrift, environment);
+    runApp(baseDrift, roundedMax, "Trajectory of Standard Bicycle Model with Lateral Drift");
 
-    // Simulate and visualize controlled bicycle model
-    double roundedControlledMax = simulateStraightPathAndGetRoundedMax(controlledVehicle, environment, controller);
-    runApp(controlledVehicle, roundedControlledMax, "Trajectory of Controlled Bicycle");
+    // Simulate and visualize bicycle model controlled to have a straight heading
+    Vehicle headingStraight = vehicle;
+    roundedMax = simulateHeadingStraight(headingStraight, environment, controller);
+    runApp(headingStraight, roundedMax, "Trajectory of Bicycle Controlled to Have a Straight Heading");
 
-    // Simulate and visualize controlled bicycle model with noise and lateral drift
-    double roundedControlledDriftMax = simulateStraightPathWithDriftAndGetRoundedMax(controlledVehicleWithDrift, environment, controller);
-    runApp(controlledVehicleWithDrift, roundedControlledDriftMax, "Trajectory of Controlled Bicycle with Noise and Lateral Drift");
+    // Simulate and visualize bicycle model controlled to have a straight heading, with noise and lateral drift
+    Vehicle headingStraightDrift = vehicle;
+    roundedMax = simulateHeadingStraightDrift(headingStraightDrift, environment, controller);
+    runApp(headingStraightDrift, roundedMax, "Trajectory of Bicycle Controlled to Have a Straight Heading, with Noise and Lateral Drift");
 
 
+    // Generate and visualize a straight path   
+    // Path Fields: x, y, heading, lenght, time step
     double initialX = 0;
     double initialY = 0;
-    // Generate and visualize a straight path, with fields: x, y, theta, lenght, dt
-    // Uses P controller to follow the path
-    Path path(initialX, initialY, 1, 100, vehicle.dt*1.5);
+    Path straightPath(initialX, initialY, 1, 100, vehicle.dt*1.5);
+    pathRoundedMax = simulateStraightPath(straightPath, environment);
 
-    double roundedStraightPathMax = simulateStraightPath(path, environment);
-    if (path.x.size() >= 2) {
-        controlledVehicleWithPredefinedStraightPath.setInitialTheta(atan2(path.y[1] - path.y[0], path.x[1] - path.x[0]));
-    } else {
-        controlledVehicleWithPredefinedStraightPath.setInitialTheta(0);
-    }
-    controlledVehicleWithPredefinedStraightPath.setInitialX(path.x.front());
-    controlledVehicleWithPredefinedStraightPath.setInitialY(path.y.front());
+    // P controller for following the path
+    Vehicle pStraight = vehicle;
+    pStraight.setInitialTheta(straightPath);
+    pStraight.setInitialX(straightPath.x.front());
+    pStraight.setInitialY(straightPath.y.front());
+    roundedMax = simulateP(pStraight, straightPath, environment, controller);
+    runApp(pStraight, straightPath, max (pathRoundedMax, roundedMax), "Straight Trajectory of Bicycle: P Controller");
 
-    double vehicleRoundedStraightPathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedStraightPath, path, environment, controller);
-    runApp(controlledVehicleWithPredefinedStraightPath, path, max (roundedStraightPathMax, vehicleRoundedStraightPathMax), "Generated Straight Path And Controlled Vehicle Trajectory");
-
-    // Generate and visualize a straight path, with fields: x, y, theta, lenght, dt
-    // Uses PID controller to follow the path
-    Path pathPID(initialX, initialY, 1, 100, vehicle.dt*1.5);
+    // PID controller for following the path
+    Vehicle pidStraight = vehicle;
     resetPathPIDState(controller);
-    double roundedStraightPathMaxPID = simulateStraightPath(pathPID, environment);
-    if (pathPID.x.size() >= 2) {
-        controlledPIDVehicleWithPredefinedStraightPath.setInitialTheta(atan2(pathPID.y[1] - pathPID.y[0], pathPID.x[1] - pathPID.x[0]));
-    } else {
-        controlledPIDVehicleWithPredefinedStraightPath.setInitialTheta(0);
-    }
-    controlledPIDVehicleWithPredefinedStraightPath.setInitialX(pathPID.x.front());
-    controlledPIDVehicleWithPredefinedStraightPath.setInitialY(pathPID.y.front());
+    pidStraight.setInitialTheta(straightPath);
+    pidStraight.setInitialX(straightPath.x.front());
+    pidStraight.setInitialY(straightPath.y.front());
+    roundedMax = simulatePID(pidStraight, straightPath, environment, controller);
+    runApp(pidStraight, straightPath, max (pathRoundedMax, roundedMax), "Straight Trajectory of Bicycle: PID Controller");
 
-    double vehicleRoundedStraightPathMaxPID = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedStraightPath, pathPID, environment, controller);
-    runApp(controlledPIDVehicleWithPredefinedStraightPath, pathPID, max (roundedStraightPathMaxPID, vehicleRoundedStraightPathMaxPID), "Generated Straight Path And PID Controlled Vehicle Trajectory");
-
-    // Generate and visualize a straight path, with fields: x, y, theta, lenght, dt
-    // Uses Stanely controller to follow the path
-    Path pathStanley(initialX, initialY, 1, 100, vehicle.dt*1.5);
-    double roundedStraightPathMaxStanley = simulateStraightPath(pathStanley, environment);
-    if (pathStanley.x.size() >= 2) {
-        controlledStanleyVehicleWithPredefinedStraightPath.setInitialTheta(atan2(pathStanley.y[1] - pathStanley.y[0], pathStanley.x[1] - pathStanley.x[0]));
-    } else {
-        controlledStanleyVehicleWithPredefinedStraightPath.setInitialTheta(0);
-    }
-    controlledStanleyVehicleWithPredefinedStraightPath.setInitialX(pathStanley.x.front());
-    controlledStanleyVehicleWithPredefinedStraightPath.setInitialY(pathStanley.y.front());
-
-    double vehicleRoundedStraightPathMaxStanley = simulatePathFollowingStanleyAndGetRoundedMax(controlledStanleyVehicleWithPredefinedStraightPath, pathStanley, environment, controller);
-    runApp(controlledStanleyVehicleWithPredefinedStraightPath, pathStanley, max (roundedStraightPathMaxStanley, vehicleRoundedStraightPathMaxStanley), "Generated Straight Path And Stanley Controlled Vehicle Trajectory");
+    // Stanley controller for following the path
+    Vehicle stanleyStraight = vehicle;
+    stanleyStraight.setInitialTheta(straightPath);
+    stanleyStraight.setInitialX(straightPath.x.front());
+    stanleyStraight.setInitialY(straightPath.y.front());
+    roundedMax = simulateStanley(stanleyStraight, straightPath, environment, controller);
+    runApp(stanleyStraight, straightPath, max (pathRoundedMax, roundedMax), "Straight Trajectory of Bicycle: Stanley Controller");
 
 
+    // Generate and visualize a circular path
+     // Path Fields: centerX, centerY, radius, time step
     double radius = 7;
     initialX = 0;
     initialY = 0;
-    // Generate and visualize a circle path, with fields: centerX, centerY, radius, dt
-    // Uses P controller to follow the path
-    Path circlePath(initialX, initialY, radius, vehicle.dt*3);
+    Path circularPath(initialX, initialY, radius, vehicle.dt*3);
+    pathRoundedMax = simulateCircularPath(circularPath, environment);
 
-    double roundedCirclePathMax = simulateCirclePath(circlePath, environment);
-    if (circlePath.x.size() >= 2) {
-        controlledVehicleWithPredefinedCircularPath.setInitialTheta(atan2(circlePath.y[1] - circlePath.y[0], circlePath.x[1] - circlePath.x[0]));
-    } else {
-        controlledVehicleWithPredefinedCircularPath.setInitialTheta(0);
-    }
-    controlledVehicleWithPredefinedCircularPath.setInitialX(circlePath.x.front());
-    controlledVehicleWithPredefinedCircularPath.setInitialY(circlePath.y.front());
+    // P controller for following the path
+    Vehicle pCircular = vehicle;
+    pCircular.setInitialTheta(circularPath);
+    pCircular.setInitialX(circularPath.x.front());
+    pCircular.setInitialY(circularPath.y.front());
+    roundedMax = simulateP(pCircular, circularPath, environment, controller);
+    runApp(pCircular, circularPath, max(roundedMax, pathRoundedMax), "Circular Trajectory of Bicycle: P Controller");
 
-    double vehicleRoundedCirclePathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedCircularPath, circlePath, environment, controller);
-    runApp(controlledVehicleWithPredefinedCircularPath, circlePath, max(vehicleRoundedCirclePathMax, roundedCirclePathMax), "Generated Circle Path And Controlled Vehicle Trajectory");
-
-     // Generate and visualize a circle path, with fields: centerX, centerY, radius, dt
-     // Uses PID controller to follow the path
-    Path circlePathPID(initialX, initialY, radius, vehicle.dt*3);
+    // PID controller for following the path
+    Vehicle pidCircular = vehicle;
     resetPathPIDState(controller);
-    double roundedCirclePathMaxPID = simulateCirclePath(circlePathPID, environment);
-    if (circlePathPID.x.size() >= 2) {
-        controlledPIDVehicleWithPredefinedCircularPath.setInitialTheta(atan2(circlePathPID.y[1] - circlePathPID.y[0], circlePathPID.x[1] - circlePathPID.x[0]));
-    } else {
-        controlledPIDVehicleWithPredefinedCircularPath.setInitialTheta(0);
-    }
-    controlledPIDVehicleWithPredefinedCircularPath.setInitialX(circlePathPID.x.front());
-    controlledPIDVehicleWithPredefinedCircularPath.setInitialY(circlePathPID.y.front());
+    pidCircular.setInitialTheta(circularPath);
+    pidCircular.setInitialX(circularPath.x.front());
+    pidCircular.setInitialY(circularPath.y.front());
+    roundedMax = simulatePID(pidCircular, circularPath, environment, controller);
+    runApp(pidCircular, circularPath, max(roundedMax, pathRoundedMax), "Circular Trajectory of Bicycle: PID Controller");
 
-    double vehiclePIDRoundedCirclePathMax = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedCircularPath, circlePathPID, environment, controller);
-    runApp(controlledPIDVehicleWithPredefinedCircularPath, circlePathPID, max(vehiclePIDRoundedCirclePathMax, roundedCirclePathMaxPID), "Generated Circle Path And PID Controlled Vehicle Trajectory");
-
-    // Generate and visualize a circle path, with fields: centerX, centerY, radius, dt
-     // Uses Stanley controller to follow the path
-    Path circlePathStanley(initialX, initialY, radius, vehicle.dt*3);
-    double roundedCirclePathMaxStanley = simulateCirclePath(circlePathStanley, environment);
-    if (circlePathStanley.x.size() >= 2) {
-        controlledStanleyVehicleWithPredefinedCircularPath.setInitialTheta(atan2(circlePathStanley.y[1] - circlePathStanley.y[0], circlePathStanley.x[1] - circlePathStanley.x[0]));
-    } else {
-        controlledStanleyVehicleWithPredefinedCircularPath.setInitialTheta(0);
-    }
-    controlledStanleyVehicleWithPredefinedCircularPath.setInitialX(circlePathStanley.x.front());
-    controlledStanleyVehicleWithPredefinedCircularPath.setInitialY(circlePathStanley.y.front());
-
-    double vehicleStanleyRoundedCirclePathMax = simulatePathFollowingStanleyAndGetRoundedMax(controlledStanleyVehicleWithPredefinedCircularPath, circlePathStanley, environment, controller);
-    runApp(controlledStanleyVehicleWithPredefinedCircularPath, circlePathStanley, max(vehicleStanleyRoundedCirclePathMax, roundedCirclePathMaxStanley), "Generated Circle Path And Stanley Controlled Vehicle Trajectory");
+    // Stanley controller for following the path
+    Vehicle stanleyCircular = vehicle;
+    stanleyCircular.setInitialTheta(circularPath);
+    stanleyCircular.setInitialX(circularPath.x.front());
+    stanleyCircular.setInitialY(circularPath.y.front());
+    roundedMax = simulateStanley(stanleyCircular, circularPath, environment, controller);
+    runApp(stanleyCircular, circularPath, max(roundedMax, pathRoundedMax), "Circular Trajectory of Bicycle: Stanley Controller");
     
 
-
+    // Generate and visualize a Sine path
+    // Fields: x, y, heading, amplitude, wavelength, length (along that heading), time step
     initialX = 0;
     initialY = 0;
-    // Generate and visualize a sine path, with fields: x, y, heading, amplitude, wavelength, length (along that heading), dt
-    // Uses P controller to follow the path
     Path sinePath(initialX, initialY, 0, 30, 30, 90, vehicle.dt*2);
+    pathRoundedMax = simulateSinePath(sinePath, environment);
 
-    double roundedSinePathMax = simulateSinePath(sinePath, environment);
-    if (sinePath.x.size() >= 2) {
-        controlledVehicleWithPredefinedSinePath.setInitialTheta(atan2(sinePath.y[1] - sinePath.y[0], sinePath.x[1] - sinePath.x[0]));
-    } else {
-        controlledVehicleWithPredefinedSinePath.setInitialTheta(0);
-    }
-    controlledVehicleWithPredefinedSinePath.setInitialX(sinePath.x.front());
-    controlledVehicleWithPredefinedSinePath.setInitialY(sinePath.y.front());
+    // P controller for following the path
+    Vehicle pSine = vehicle;
+    pSine.setInitialTheta(sinePath);
+    pSine.setInitialX(sinePath.x.front());
+    pSine.setInitialY(sinePath.y.front());
+    roundedMax = simulateP(pSine, sinePath, environment, controller);
+    runApp(pSine ,sinePath, max(roundedMax, pathRoundedMax), "Sine Trajectory of Bicycle: P Controller");
 
-    double vehicleRoundedSinePathMax = simulatePathFollowingPAndGetRoundedMax(controlledVehicleWithPredefinedSinePath, sinePath, environment, controller);
-    runApp(controlledVehicleWithPredefinedSinePath ,sinePath, max(vehicleRoundedSinePathMax, roundedSinePathMax), "Generated Sine Path And Controlled Vehicle Trajectory");
-
-    // Generate and visualize a sine path, with fields: x, y, heading, amplitude, wavelength, length (along that heading), dt
-    // Uses PID controller to follow the path
-    Path sinePathPID(initialX, initialY, 0, 30, 30, 90, vehicle.dt*2);
+    // PID controller for following the path
+    Vehicle pidSine = vehicle;
     resetPathPIDState(controller);
-    double roundedSinePathMaxPID = simulateSinePath(sinePathPID, environment);
-    if (sinePathPID.x.size() >= 2) {
-        controlledPIDVehicleWithPredefinedSinePath.setInitialTheta(atan2(sinePathPID.y[1] - sinePathPID.y[0], sinePathPID.x[1] - sinePathPID.x[0]));
-    } else {
-        controlledPIDVehicleWithPredefinedSinePath.setInitialTheta(0);
-    }
-    controlledPIDVehicleWithPredefinedSinePath.setInitialX(sinePathPID.x.front());
-    controlledPIDVehicleWithPredefinedSinePath.setInitialY(sinePathPID.y.front());
+    pidSine.setInitialTheta(sinePath);
+    pidSine.setInitialX(sinePath.x.front());
+    pidSine.setInitialY(sinePath.y.front());
+    roundedMax = simulatePID(pidSine, sinePath, environment, controller);
+    runApp(pidSine ,sinePath, max(roundedMax, pathRoundedMax), "Sine Trajectory of Bicycle: PID Controller");
 
-    double vehiclePIDRoundedSinePathMax = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedSinePath, sinePathPID, environment, controller);
-    runApp(controlledPIDVehicleWithPredefinedSinePath ,sinePathPID, max(vehiclePIDRoundedSinePathMax, roundedSinePathMaxPID), "Generated Sine Path And PID Controlled Vehicle Trajectory");
-
-    // Generate and visualize a sine path, with fields: x, y, heading, amplitude, wavelength, length (along that heading), dt
-    // Uses Stanley controller to follow the path
-    Path sinePathStanley(initialX, initialY, 0, 30, 30, 90, vehicle.dt*2);
-    double roundedSinePathMaxStanley = simulateSinePath(sinePathStanley, environment);
-    if (sinePathStanley.x.size() >= 2) {
-        controlledStanleyVehicleWithPredefinedSinePath.setInitialTheta(atan2(sinePathStanley.y[1] - sinePathStanley.y[0], sinePathStanley.x[1] - sinePathStanley.x[0]));
-    } else {
-        controlledStanleyVehicleWithPredefinedSinePath.setInitialTheta(0);
-    }
-    controlledStanleyVehicleWithPredefinedSinePath.setInitialX(sinePathStanley.x.front());
-    controlledStanleyVehicleWithPredefinedSinePath.setInitialY(sinePathStanley.y.front());
-
-    double vehicleStanleyRoundedSinePathMax = simulatePathFollowingStanleyAndGetRoundedMax(controlledStanleyVehicleWithPredefinedSinePath, sinePathStanley, environment, controller);
-    runApp(controlledStanleyVehicleWithPredefinedSinePath ,sinePathStanley, max(vehicleStanleyRoundedSinePathMax, roundedSinePathMaxStanley), "Generated Sine Path And Stanley Controlled Vehicle Trajectory");
+    // Stanley controller for following the path
+    Vehicle stanleySine = vehicle;
+    stanleySine.setInitialTheta(sinePath);
+    stanleySine.setInitialX(sinePath.x.front());
+    stanleySine.setInitialY(sinePath.y.front());
+    roundedMax = simulateStanley(stanleySine, sinePath, environment, controller);
+    runApp(stanleySine ,sinePath, max(roundedMax, pathRoundedMax), "Sine Trajectory of Bicycle: Stanley Controller");
 
 
-
+    // Generate and visualize a chicane path
+    // Fields: x, y, heading, radius, entryLenght (before first turn), middleLenght (between turns), finalLenght (after second turn), time step
     initialX = 0;
     initialY = 0;
-    // Generate and visualize a chicane turn path, with fields: x, y, heading, radius, entryLenght, middleLenght, finalLenght, dt
-    // Uses PID controller to follow the path
     Path chicanePath(initialX, initialY, 0, 5, 12, 6, 12, vehicle.dt*2);
+    pathRoundedMax = simulateChicanePath(chicanePath, environment);
+
+    // Uses PID controller for following the path
+    Vehicle pidChicane = vehicle;
     resetPathPIDState(controller);
-    double roundedSharpTurnPathMaxPID = simulateChicanePath(chicanePath, environment);
-    if (chicanePath.x.size() >= 2) {
-        controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialTheta(atan2(chicanePath.y[1] - chicanePath.y[0], chicanePath.x[1] - chicanePath.x[0]));
-    } else {
-        controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialTheta(0);
-    }
-    controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialX(chicanePath.x.front());
-    controlledPIDVehicleWithPredefinedSharpTurnPath.setInitialY(chicanePath.y.front());   
+    pidChicane.setInitialTheta(chicanePath);
+    pidChicane.setInitialX(chicanePath.x.front());
+    pidChicane.setInitialY(chicanePath.y.front());   
+    roundedMax = simulatePID(pidChicane, chicanePath, environment, controller);
+    runApp(pidChicane ,chicanePath, max(roundedMax, pathRoundedMax), "Chicane Trajectory of Bicycle: PID Controller");
 
-    double vehiclePIDRoundedSharpTurnPathMax = simulatePathFollowingPIDAndGetRoundedMax(controlledPIDVehicleWithPredefinedSharpTurnPath, chicanePath, environment, controller);
-    runApp(controlledPIDVehicleWithPredefinedSharpTurnPath ,chicanePath, max(vehiclePIDRoundedSharpTurnPathMax, roundedSharpTurnPathMaxPID), "Generated Sharp Turn Path And PID Controlled Vehicle Trajectory");
-
-    // Generate and visualize a chicane turn path, with fields: x, y, heading, radius, entryLenght, middleLenght, finalLenght, dt
-    // Uses Stanely controller to follow the path
-    Path chicanePathStanley(initialX, initialY, 0, 5, 12, 6, 12, vehicle.dt*2);
-    double roundedSharpTurnPathMaxStanley = simulateChicanePath(chicanePathStanley, environment);
-    if (chicanePathStanley.x.size() >= 2) {
-        controlledStanleyVehicleWithPredefinedSharpTurnPath.setInitialTheta(atan2(chicanePathStanley.y[1] - chicanePathStanley.y[0], chicanePathStanley.x[1] - chicanePathStanley.x[0]));
-    } else {
-        controlledStanleyVehicleWithPredefinedSharpTurnPath.setInitialTheta(0);
-    }
-    controlledStanleyVehicleWithPredefinedSharpTurnPath.setInitialX(chicanePathStanley.x.front());
-    controlledStanleyVehicleWithPredefinedSharpTurnPath.setInitialY(chicanePathStanley.y.front());   
-
-    double vehicleStanleyRoundedSharpTurnPathMax = simulatePathFollowingStanleyAndGetRoundedMax(controlledStanleyVehicleWithPredefinedSharpTurnPath, chicanePathStanley, environment, controller);
-    runApp(controlledStanleyVehicleWithPredefinedSharpTurnPath ,chicanePathStanley, max(vehicleStanleyRoundedSharpTurnPathMax, roundedSharpTurnPathMaxStanley), "Generated Sharp Turn Path And Stanley Controlled Vehicle Trajectory");
+    // Uses Stanley controller for following the path
+    Vehicle stanleyChicane = vehicle;
+    stanleyChicane.setInitialTheta(chicanePath);
+    stanleyChicane.setInitialX(chicanePath.x.front());
+    stanleyChicane.setInitialY(chicanePath.y.front());   
+    roundedMax = simulateStanley(stanleyChicane, chicanePath, environment, controller);
+    runApp(stanleyChicane ,chicanePath, max(roundedMax, pathRoundedMax), "Chicane Trajectory of Bicycle: Stanley Controller");
 
     return 0;
 }

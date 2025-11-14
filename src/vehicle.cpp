@@ -2,6 +2,7 @@
 #include <cmath>
 #include "vehicle.hpp"
 #include "environment.hpp"
+#include "path.hpp"
 
 using namespace std;
 
@@ -45,6 +46,15 @@ void Vehicle::setInitialY(double newY){
     y[0] = newY;
 }
 
-void Vehicle::setInitialTheta(double newTheta){
+void Vehicle::setTheta(double newTheta){
     theta[0] = newTheta;
+}
+
+
+void Vehicle::setInitialTheta(Path& path){
+    if (path.x.size() >= 2) {
+        setTheta(atan2(path.y[1] - path.y[0], path.x[1] - path.x[0]));
+    } else {
+        setTheta(0);
+    }
 }

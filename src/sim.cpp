@@ -8,8 +8,13 @@
 
 using namespace std;
 
-// Simulate vehicle movement based on kinematic bicycle model and returns the rounded maximum distance from origin
-double simulateAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
+// Each function simulates the vehicle/path, updating its state after each time step
+// The maximum distance from the origin is returned
+
+// Simulates vehicle movement based on kinematic bicycle model
+// Returns the rounded maximum distance from origin
+// (Task 1)
+double simulateBase(Vehicle& vehicle, Environment& environment){
     double max = 0.0;
 
     for (int i = 1; i < environment.steps; i++){
@@ -25,9 +30,10 @@ double simulateAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
     return ceil(max);
 }
 
-// Simulate vehicle movement based on kinematic bicycle model, takes into account lateral drift
+// Simulates vehicle movement based on kinematic bicycle model, takes into account lateral drift
 // Returns the rounded maximum distance from origin
-double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment){
+// (Task 1)
+double simulateBaseDrift(Vehicle& vehicle, Environment& environment){
 
     double max = 0.0;
 
@@ -45,15 +51,17 @@ double simulateWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environm
     return ceil(max);
 }
 
-// Simulate vehicle moving in a straight path using proportional control and returns the rounded maximum distance from origin
-double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller){
+// Simulates vehicle moving in a straight path using proportional control
+// Returns the rounded maximum distance from origin
+// (Task 2)
+double simulateHeadingStraight(Vehicle& vehicle, Environment& environment, Controller& controller){
 
     double max = 0.0;
     double targetHeadingAngle = vehicle.theta[0];
 
     for (int i = 0; i < environment.steps; i++){
         // Compute steering angle using proportional control
-        vehicle.delta = computeHeadingCorrection(controller, targetHeadingAngle, vehicle.theta.back());
+        vehicle.delta = steerHeading(controller, targetHeadingAngle, vehicle.theta.back());
         vehicle.updatePosition();
         if (abs(vehicle.x[i]) > max){
             max = abs(vehicle.x[i]);
@@ -66,9 +74,10 @@ double simulateStraightPathAndGetRoundedMax(Vehicle& vehicle, Environment& envir
     return ceil(max);
 }
 
-// Simulate vehicle moving in a straight path using proportional control, takes into account lateral drift and noise.
+// Simulates vehicle moving in a straight path using proportional control, takes into account lateral drift and noise.
 // Returns the rounded maximum distance from origin
-double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environment& environment, Controller& controller){
+// (Task 2)
+double simulateHeadingStraightDrift(Vehicle& vehicle, Environment& environment, Controller& controller){
 
     double max = 0.0;
 
@@ -78,7 +87,7 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
         // Add Gaussian noise to the current heading angle
         double noisyHeading = vehicle.theta.back() + generateGaussianNoise(controller);
         // Compute steering angle using proportional control, taking lateral drift and noise into consideration
-        vehicle.delta = computeHeadingAndDriftCorrection(vehicle, environment, controller, targetHeadingAngle, noisyHeading);
+        vehicle.delta = steerHeadingDrift(vehicle, environment, controller, targetHeadingAngle, noisyHeading);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
         if (abs(vehicle.x[i]) > max){
@@ -92,7 +101,9 @@ double simulateStraightPathWithDriftAndGetRoundedMax(Vehicle& vehicle, Environme
     return ceil(max);
 }
 
-// Generation of a straight path and returns the rounded maximum distance from origin
+// Generates a straight path
+// Returns the rounded maximum distance from origin
+// (Task 3)
 double simulateStraightPath(Path& path, Environment& environment){
     double max = 0.0;
     path.generateStraightPath();
@@ -108,10 +119,12 @@ double simulateStraightPath(Path& path, Environment& environment){
     return ceil(max);
 }
 
-// Generation of a circle path and returns the rounded maximum distance from origin
-double simulateCirclePath(Path& path, Environment& environment){
+// Generates a circular path
+// Returns the rounded maximum distance from origin
+// (Task 3)
+double simulateCircularPath(Path& path, Environment& environment){
     double max = 0.0;
-    path.generateCirclePath();
+    path.generateCircularPath();
     for (int i = 1; i < path.x.size(); i++){
         if (abs(path.x[i]) > max){
             max = abs(path.x[i]);
@@ -124,7 +137,9 @@ double simulateCirclePath(Path& path, Environment& environment){
     return ceil(max);
 }
 
-// Generation of a sine path and returns the rounded maximum distance from origin
+// Generates a sine path
+// Returns the rounded maximum distance from origin
+// (Task 3)
 double simulateSinePath(Path& path, Environment& environment){
     double max = 0.0;
     path.generateSinePath();
@@ -140,13 +155,15 @@ double simulateSinePath(Path& path, Environment& environment){
     return ceil(max);
 }
 
-// Simulate vehicle following a given path using path following control and returns the rounded maximum distance from origin
+// Simulates vehicle following a given path 
+// Uses P controller 
+// Returns the rounded maximum distance from origin
 // (Task 3)
-double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
+double simulateP(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
 
     double max = 0.0;
 
-    for (int i = 0; i < environment.stepsPathFollowing; i++) {
+    for (int i = 0; i < environment.stepsPath; i++) {
 
         double vx = vehicle.x.back();
         double vy = vehicle.y.back();
@@ -168,7 +185,7 @@ double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Envi
             break;
         }
 
-        vehicle.delta = computeSteeringForPathFollowingP(vehicle, path, controller);
+        vehicle.delta = steerHeadingP(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
 
@@ -179,13 +196,15 @@ double simulatePathFollowingPAndGetRoundedMax(Vehicle& vehicle, Path& path, Envi
     return ceil(max);
 }
 
-// Simulate vehicle following a given path using PID path following control and returns the rounded maximum distance from origin
+// Simulates vehicle following a given path
+// Uses PID controller 
+// Returns the rounded maximum distance from origin
 // (Task 4)
-double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
+double simulatePID(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
 
     double max = 0.0;
 
-    for (int i = 0; i < environment.stepsPathFollowing; i++) {
+    for (int i = 0; i < environment.stepsPath; i++) {
 
         double vx = vehicle.x.back();
         double vy = vehicle.y.back();
@@ -207,7 +226,7 @@ double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, En
             break;
         }
 
-        vehicle.delta = computeSteeringForPathFollowingPID(vehicle, path, controller);
+        vehicle.delta = steerHeadingPID(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
 
@@ -218,7 +237,8 @@ double simulatePathFollowingPIDAndGetRoundedMax(Vehicle& vehicle, Path& path, En
     return ceil(max);
 }
 
-// Generation of a chicane path and returns the rounded maximum distance from origin
+// Generates a chicane path 
+// Returns the rounded maximum distance from origin
 double simulateChicanePath(Path& path, Environment& environment)
 {
     double max = 0.0;
@@ -234,13 +254,15 @@ double simulateChicanePath(Path& path, Environment& environment)
 }
 
 
-// Simulate vehicle following a given path using Stanley path following control and returns the rounded maximum distance from origin
+// Simulates vehicle following a given path 
+// Uses Stanley ontroller 
+// Returns the rounded maximum distance from origin
 // (Task 5)
-double simulatePathFollowingStanleyAndGetRoundedMax(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
+double simulateStanley(Vehicle& vehicle, Path& path, Environment& environment, Controller& controller) {
 
     double max = 0.0;
 
-    for (int i = 0; i < environment.stepsPathFollowing; i++) {
+    for (int i = 0; i < environment.stepsPath; i++) {
 
         double vx = vehicle.x.back();
         double vy = vehicle.y.back();
@@ -262,7 +284,7 @@ double simulatePathFollowingStanleyAndGetRoundedMax(Vehicle& vehicle, Path& path
             break;
         }
 
-        vehicle.delta = computeSteeringForStanley(vehicle, path, controller);
+        vehicle.delta = steerHeadingStanley(vehicle, path, controller);
         vehicle.updatePosition();
         vehicle.applyLateralDrift(environment);
 

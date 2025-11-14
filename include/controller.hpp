@@ -16,6 +16,14 @@ struct Controller{
     double integralError = 0.0;
     double previousError = 0.0;
     bool firstUpdate = true;
+
+    double Ks;
+};
+
+
+struct PathError {
+    double crossTrackError;
+    double pathHeading;
 };
 
 #endif

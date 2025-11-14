@@ -5,12 +5,20 @@ class Vehicle;
 struct Environment;
 struct Controller;
 class Path;
+struct PathError;
 
 double computeHeadingCorrection(Controller& controller, double targetHeadingAngle, double currentHeadingAngle);
 double computeDriftError(Vehicle& vehicle);
 double computeHeadingAndDriftCorrection(Vehicle& vehicle, Environment& environment, Controller& controller, double targetHeadingAngle, double currentHeadingAngle);
+
 double computeCrossTrackError(Vehicle& vehicle, Path& path);
 double computeSteeringForPathFollowingP(Vehicle& vehicle, Path& path, Controller& controller);
+
 double computeSteeringForPathFollowingPID(Vehicle& vehicle, Path& path, Controller& controller);
 void resetPathPIDState(Controller& controller);
+
+PathError computeCrossTrackErrorAndPathHeading(Vehicle& vehicle, Path& path);
+double normalizeAngle(double angle);
+double computeSteeringForStanley(Vehicle& vehicle, Path& path, Controller& controller);
+
 #endif

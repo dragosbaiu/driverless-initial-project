@@ -16,3 +16,4 @@ mean - Used for Gaussian noise
 standardDeviation - Used for Gausiann noise
 Ki - Integral Gain
 Kd - Derivative Gain
+Ks - Stanley Gain

@@ -90,7 +90,6 @@ void Path::generateSinePath() {
 }
 
 // Generate a sharp turn path (in this case a chicane)
-// Generate a sharp turn path (in this case a chicane)
 void Path::generateChicanePath() 
 {
     double heading = theta.back();   
@@ -99,7 +98,7 @@ void Path::generateChicanePath()
 
     int steps = entryStraight / dt;
     for (int i = 0; i < steps; ++i) {
-        xCurr += cos(heading) * dt;
+        xCurr +=cos(heading) * dt;
         yCurr += sin(heading) * dt;
         x.push_back(xCurr);
         y.push_back(yCurr);

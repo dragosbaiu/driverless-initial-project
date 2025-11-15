@@ -100,6 +100,7 @@ data/inputFields.txt
 
 ## Features
 <table> <tr> <td style="vertical-align:top; width:50%">
+
 ### Vehicle
 - Full kinematic bicycle model  
 - Lateral drift simulation  
@@ -111,6 +112,7 @@ data/inputFields.txt
 - Sine path  
 - Chicane Path
 </td> <td style="vertical-align:top; width:50%">
+
 ### Controllers
 - Straight Path Controller
 - P controller  

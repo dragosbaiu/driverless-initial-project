@@ -79,22 +79,22 @@ You can view what each parameter is inside
 data/inputFields.txt
 ```
 
-### Output
-1. Trajectory of Standard Vehicle using Kinematic Bycicle Model (Task 1)
-2. Trajectory of Standard Vehicle with Lateral Drift (Task 2)
-3. Trajectory of Vehicle, Controlled to Have a Straight Heading (Task 2)
-4. Trajectory of Vehicle, Controlled to Have a Straight Heading, with Noise and Lateral Drift (Task 2)
-5. Straight Path and Trajectory of Vehicle Using P Controller (Task 3)
-6. Straight Path and Trajectory of Vehicle Using PID Controller (Task 4)
-7. Straight Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
-8. Circular Path and Trajectory of Vehicle Using P Controller (Task 3)
-9. Circular Path and Trajectory of Vehicle Using PID Controller (Task 4)
-10. Circular Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
-11. Sine Path and Trajectory of Vehicle Using P Controller (Task 3)
-12. Sine Path and Trajectory of Vehicle Using PID Controller (Task 4)
-13. Sine Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
-14. Chicane Path and Trajectory of Vehicle Using PID Controller (Task 4)
-15. Chicane Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
+### Output Windows
+- Trajectory of Standard Vehicle using Kinematic Bycicle Model (Task 1)
+- Trajectory of Standard Vehicle with Lateral Drift (Task 2)
+- Trajectory of Vehicle, Controlled to Have a Straight Heading (Task 2)
+- Trajectory of Vehicle, Controlled to Have a Straight Heading, with Noise and Lateral Drift (Task 2)
+- Straight Path and Trajectory of Vehicle Using P Controller (Task 3)
+- Straight Path and Trajectory of Vehicle Using PID Controller (Task 4)
+- Straight Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
+- Circular Path and Trajectory of Vehicle Using P Controller (Task 3)
+- Circular Path and Trajectory of Vehicle Using PID Controller (Task 4)
+- Circular Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
+- Sine Path and Trajectory of Vehicle Using P Controller (Task 3)
+- Sine Path and Trajectory of Vehicle Using PID Controller (Task 4)
+- Sine Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
+- Chicane Path and Trajectory of Vehicle Using PID Controller (Task 4)
+- Chicane Path and Trajectory of Vehicle Using Stanley Controller (Task 5)
 
 ---
 

@@ -99,7 +99,7 @@ data/inputFields.txt
 ---
 
 ## Features
-
+<table> <tr> <td style="vertical-align:top; width:50%">
 ### Vehicle
 - Full kinematic bicycle model  
 - Lateral drift simulation  
@@ -110,7 +110,7 @@ data/inputFields.txt
 - Circle path  
 - Sine path  
 - Chicane Path
-
+</td> <td style="vertical-align:top; width:50%">
 ### Controllers
 - Straight Path Controller
 - P controller  
@@ -122,7 +122,7 @@ data/inputFields.txt
 - Scaled coordinate axes and grid
 - Path drawing
 - Vehicle Trajectory drawing
-
+</td> </tr> </table>
 ---
 
 ## Included Mathematics
@@ -172,91 +172,112 @@ Computed as the perpendicular distance from the vehicle to the nearest point on 
 
 ## Approach Used
 
-The project follows a modular design, with different classes: Vehicle, Path, Environment (for Lateral Drift and Simulation Steps), and Controller (for the controller parameters). 
-At first, the kynematic bycicle equations are implemented, and then trajectories are plotted . To create an accurante vizualization, the maximum coordinate reached by the vehicle 
-(either on x or y) is taken, and then the axes and grids are scaled accordingly. For the latter tasks, paths of different shapes are generated. The inital coordinate and heading
-are decided by the user, followed by specific parameters for each type of path (radius for circular paths, wavelength and amplitude for sine path, etc.). Then, the simulation takes place,
-in which the vehicle uses a specific controller to update its stearing angle. Moreover, inside the simulation, the vehicle updates its position after each time step. For some simulations, 
-lateral drift is applied during the simulatin process to view its effects on the trajectory of the vehicle. Nevertheless, in some cases noise is also applied (in this project Gaussian Noise 
-was used due to its simple implementation). The output displays the trajectory of the vehicle with yellow, and the path with blue (if present).
+The project follows a modular design, with separate classes for Vehicle, Path, Environment, and Controller.
+
+First, the kinematic bicycle model is implemented and tested visually. To ensure proper visualization, the maximum coordinate reached by the vehicle (either x or y) is computed and used to scale the axes proportionally.
+
+Then, different paths are generated. The initial coordinate and heading are defined by the user, and each path type uses its own parameters (e.g., radius for circles, amplitude/wavelength for sine waves).
+
+During simulation, the vehicle uses a specific controller to update its steering angle at each time step. In some tests, lateral drift and Gaussian noise are applied to observe their impact on the vehicle's trajectory.
+
+The visualizer displays the vehicle trajectory (yellow) and the path (blue).
 
 ---
 
 ## Controller Tuning Strategy
 
-For the Proportional Controller, the approach used to tune the Proportional (Kp) was to start with small values (~0.1) and increase it slowly until the model starts to oscillate.
-For the PID controller, the approach was the same: At beggining, Kp was set to a low value, and the Derivative Gain (Kd) and Integral Gain (Ki) were set to 0. As osscilations appeared, 
-Kd was increased slightly, to reduce them. However, after a certain point, the turns became less agressive, making the vehicle unable to follow sharp turns. Following this, Ki was increased,
-starting with very low values (0.005, 0.01) and ending up much lower in comparison to Kd and Kp.
-Finally, for the Stanley controller, Stanley gain started out at a low value (0.1), and then it was increased until the trajectory of the vehicle started to behave strange (oscillations appeared
-, steering was very sudden)
+For the P controller, Kp was gradually increased starting from small values (~0.1) until oscillations occurred.
+
+For the PID controller, tuning followed this approach:
+- Start with a small 
+- Set Ki = 0 and Kd = 0
+- Increase Kd to reduce oscillations
+- Add a very small Ki to correct steady-state error
+
+For the Stanley controller, the gain Ks was tested from small values (0.1) upward. Higher values made the vehicle go closer to the path, but unstable steering appeared beyond a certain value.
 
 ---
 
 ## Challenges Faced
 
-The biggest chalange faced was understanding the math behind this project - from the geometry behind computing headings to the formulas behind each controller. To be more specific, it was hard
-for me to understand at first how each controller parameter affects the trajectory of the vehicle. 
-Additionally, I found it hard at first working with Raylib, as it was my first time using this library. 
-Nevertheless, in terms of the simulation, I find it difficult to tune the controllers in order to make the vehicle follow short paths when it has high speed.
+The biggest challenge was understanding the mathematics behind the project — from heading geometry to the behavior of each controller.
+
+Additionally, this was my first time using Raylib, so creating the visualization system was hard at first.
+
+Tuning the controllers for short, sharp paths, when the vehicle had a high speed also proved challenging.
 
 # Simulation Results
 
 ### 1. Standard Models
 
 Standard Bicycle Model 
+
 ![Standard Bicycle Model](docs/1.png)
 
 Standard Model with Lateral Drift
+
 ![Standard Model with Lateral Drift](docs/2.png)
 
 ### 2. Heading Control
 
 Straight Heading
+
 ![Straight Heading](docs/3.png)
 
 Straight Heading with Drift & Noise
+
 ![Straight Heading with Drift & Noise](docs/4.png)
 
 ### 3. Straight Path Following
 
 Straight Path – P Controller
+
 ![Straight Path – P Controller](docs/5.png)
 
 Straight Path – PID Controller
+
 ![Straight Path – PID Controller](docs/6.png)
 
 Straight Path – Stanley Controller
+
 ![Straight Path – Stanley Controller](docs/7.png)
 
 ### 4. Circular Path Following
 
 Circular Path – P Controller
+
 ![Circular Path – P Controller](docs/8.png)
 
 Circular Path – PID Controller
+
 ![Circular Path – PID Controller](docs/9.png)
 
 Circular Path – Stanley Controller
+
 ![Circular Path – Stanley Controller](docs/10.png)
 
 ### 5. Sine Path Following
 
 Sine Path – P Controller
+
 ![Sine Path – P Controller](docs/11.png)
 
 Sine Path – PID Controller
+
 ![Sine Path – PID Controller](docs/12.png)
 
 Sine Path – Stanley Controller
+
 ![Sine Path – Stanley Controller](docs/13.png)
 
 ### 6. Chicane Path Following
 
 Chicane Path – PID Controller
+
 ![Chicane Path – PID Controller](docs/14.png)
 
 Chicane Path – Stanley Controller
+
 ![Chicane Path – Stanley Controller](docs/15.png)
 
 ---
